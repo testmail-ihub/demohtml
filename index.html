@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Live Playground</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 16px 24px;
+      border-bottom: 1px solid #1e2330;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0f1117;
+    }
+
+    header h1 {
+      font-size: 15px;
+      font-weight: 500;
+      color: #94a3b8;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    #status {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #1e2330;
+      color: #64748b;
+    }
+
+    #status.loaded { background: #0d2a1a; color: #4ade80; }
+    #status.error  { background: #2a0d0d; color: #f87171; }
+
+    #file-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 10px 24px;
+      border-bottom: 1px solid #1e2330;
+      flex-wrap: wrap;
+      background: #0a0d14;
+    }
+
+    .tab {
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      background: transparent;
+      border: 1px solid #1e2330;
+      color: #64748b;
+      transition: all 0.15s;
+    }
+
+    .tab:hover  { border-color: #334155; color: #94a3b8; }
+    .tab.active { background: #1e2330; border-color: #334155; color: #e2e8f0; }
+
+    #canvas {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      position: relative;
+    }
+
+    /* Renders HTML files */
+    #html-frame {
+      width: 100%;
+      height: 75vh;
+      border: 1px solid #1e2330;
+      border-radius: 12px;
+      background: #fff;
+      display: none;
+    }
+
+    /* Renders images */
+    #img-view {
+      max-width: 100%;
+      max-height: 75vh;
+      border-radius: 12px;
+      border: 1px solid #1e2330;
+      display: none;
+    }
+
+    /* Renders code / text */
+    #code-view {
+      width: 100%;
+      max-height: 75vh;
+      overflow: auto;
+      background: #0a0d14;
+      border: 1px solid #1e2330;
+      border-radius: 12px;
+      padding: 24px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #94a3b8;
+      display: none;
+      white-space: pre;
+    }
+
+    /* Renders CSS animations inline */
+    #anim-view {
+      width: 100%;
+      min-height: 300px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #empty-state {
+      text-align: center;
+      color: #334155;
+    }
+
+    #empty-state p { font-size: 14px; margin-top: 8px; }
+
+    footer {
+      padding: 12px 24px;
+      border-top: 1px solid #1e2330;
+      font-size: 11px;
+      color: #334155;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>&#9654; Live Playground</h1>
+    <span id="status">waiting</span>
+  </header>
+
+  <div id="file-tabs"></div>
+
+  <div id="canvas">
+    <div id="empty-state">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#334155" stroke-width="1.5">
+        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+        <polyline points="13 2 13 9 20 9"/>
+      </svg>
+      <p>Push a file to your repo — it will appear here</p>
+    </div>
+
+    <iframe id="html-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+    <img id="img-view" alt="Preview" />
+    <pre id="code-view"></pre>
+    <div id="anim-view"></div>
+  </div>
+
+  <footer id="footer">No file loaded</footer>
+
+  <script>
+    // ─── CONFIG ───────────────────────────────────────────────────────────────
+    // Put the files you want to be auto-loadable here.
+    // This list updates automatically when you add new entries.
+    const FILES = [
+      "content.html",       // push an HTML page
+      "animation.css",      // push a CSS animation
+      "sketch.js",          // push a JS sketch
+      "image.png",          // push an image
+      "image.jpg",
+      "image.gif",
+      "image.svg",
+    ];
+    // ─────────────────────────────────────────────────────────────────────────
+
+    const IMAGE_TYPES  = ["png","jpg","jpeg","gif","svg","webp","avif"];
+    const CODE_TYPES   = ["js","ts","py","json","md","txt","xml","yaml","yml"];
+    const ANIM_TYPES   = ["css"];
+
+    const statusEl   = document.getElementById("status");
+    const tabsEl     = document.getElementById("file-tabs");
+    const footerEl   = document.getElementById("footer");
+    const emptyEl    = document.getElementById("empty-state");
+    const htmlFrame  = document.getElementById("html-frame");
+    const imgView    = document.getElementById("img-view");
+    const codeView   = document.getElementById("code-view");
+    const animView   = document.getElementById("anim-view");
+
+    function ext(filename) {
+      return filename.split(".").pop().toLowerCase();
+    }
+
+    function hideAll() {
+      htmlFrame.style.display = "none";
+      imgView.style.display   = "none";
+      codeView.style.display  = "none";
+      animView.style.display  = "none";
+      emptyEl.style.display   = "none";
+    }
+
+    function setStatus(text, type) {
+      statusEl.textContent = text;
+      statusEl.className   = type || "";
+    }
+
+    async function loadFile(filename) {
+      setStatus("loading...", "");
+      hideAll();
+
+      // Mark active tab
+      document.querySelectorAll(".tab").forEach(t => {
+        t.classList.toggle("active", t.dataset.file === filename);
+      });
+
+      const cacheBust = `?v=${Date.now()}`;
+      const url = filename + cacheBust;
+
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`${res.status}`);
+
+        const type = ext(filename);
+
+        if (type === "html") {
+          const html = await res.text();
+          htmlFrame.srcdoc = html;
+          htmlFrame.style.display = "block";
+          setStatus("html", "loaded");
+
+        } else if (IMAGE_TYPES.includes(type)) {
+          imgView.src = url;
+          imgView.style.display = "block";
+          setStatus("image", "loaded");
+
+        } else if (type === "css") {
+          const css = await res.text();
+          animView.innerHTML = `
+            <style>${css}</style>
+            <div class="animation-wrapper" style="display:flex;align-items:center;justify-content:center;width:100%;min-height:300px;">
+              <!-- CSS animation will render here from your pushed file -->
+              <div class="box"></div>
+            </div>`;
+          animView.style.display = "flex";
+          setStatus("css animation", "loaded");
+
+        } else if (CODE_TYPES.includes(type)) {
+          const text = await res.text();
+          codeView.textContent = text;
+          codeView.style.display = "block";
+          setStatus(type + " file", "loaded");
+
+        } else {
+          // Unknown — try rendering as HTML anyway
+          const text = await res.text();
+          htmlFrame.srcdoc = text;
+          htmlFrame.style.display = "block";
+          setStatus("rendered", "loaded");
+        }
+
+        footerEl.textContent = `Loaded: ${filename}  |  ${new Date().toLocaleTimeString()}`;
+
+      } catch (err) {
+        emptyEl.style.display = "block";
+        emptyEl.querySelector("p").textContent = `Could not load "${filename}" — make sure it's pushed to your repo.`;
+        setStatus("not found", "error");
+        footerEl.textContent = `Error loading ${filename}`;
+      }
+    }
+
+    // Build tabs
+    function buildTabs(files) {
+      tabsEl.innerHTML = "";
+      files.forEach(f => {
+        const btn = document.createElement("button");
+        btn.className    = "tab";
+        btn.textContent  = f;
+        btn.dataset.file = f;
+        btn.onclick      = () => loadFile(f);
+        tabsEl.appendChild(btn);
+      });
+    }
+
+    // Auto-detect which files actually exist in the repo
+    async function detectFiles() {
+      const found = [];
+      await Promise.all(FILES.map(async f => {
+        try {
+          const r = await fetch(f + "?check=1", { method: "HEAD" });
+          if (r.ok) found.push(f);
+        } catch (_) {}
+      }));
+      return found;
+    }
+
+    async function init() {
+      const found = await detectFiles();
+      if (found.length === 0) {
+        emptyEl.style.display = "block";
+        setStatus("waiting", "");
+        return;
+      }
+      buildTabs(found);
+      loadFile(found[0]); // auto-load first found file
+    }
+
+    init();
+
+    // Auto-refresh every 30 seconds to pick up new pushes
+    setInterval(async () => {
+      const found = await detectFiles();
+      buildTabs(found);
+    }, 30000);
+  </script>
+
+</body>
+</html>
