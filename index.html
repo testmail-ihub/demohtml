@@ -1,451 +1,469 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Portfolio</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Innovation One-Pager — CIO Morning Briefing</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sn-infinite: #032D42;
+    --sn-teal: #0B4A6F;
+    --sn-wasabi: #B8E986;
+    --sn-wasabi-dim: #7BBF4A;
+  }
+  @media print {
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { box-shadow: none !important; margin: 0 !important; border-radius: 0 !important; }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: #E8EDF1;
+    font-family: 'DM Sans', sans-serif;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+  }
+  .page {
+    width: 850px;
+    min-height: 1100px;
+    background: var(--sn-infinite);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    position: relative;
+    color: #fff;
+  }
 
-    :root {
-      --bg:        #0f1117;
-      --surface:   #161b27;
-      --border:    #1e2a3a;
-      --accent:    #6366f1;
-      --accent2:   #818cf8;
-      --text:      #e2e8f0;
-      --muted:     #64748b;
-      --success:   #4ade80;
-      --danger:    #f87171;
-    }
+  /* Top banner */
+  .top-banner {
+    background: linear-gradient(135deg, var(--sn-infinite) 0%, var(--sn-teal) 100%);
+    padding: 36px 44px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .top-banner::after {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -10%;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(184,233,134,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6px;
+  }
+  .logo-area {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--sn-wasabi);
+  }
+  .panel-badge {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    background: rgba(184,233,134,0.12);
+    border: 1px solid rgba(184,233,134,0.25);
+    border-radius: 20px;
+    color: var(--sn-wasabi);
+  }
+  .top-banner h1 {
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-top: 10px;
+    letter-spacing: -0.5px;
+  }
+  .top-banner h1 span { color: var(--sn-wasabi); }
+  .tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 6px;
+    font-weight: 300;
+  }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+  /* Main content */
+  .content {
+    padding: 28px 44px 36px;
+  }
 
-    nav {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 56px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+  /* The problem / solution / demo strip */
+  .strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .strip-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 18px 20px;
+  }
+  .strip-card .sc-icon {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  .strip-card h3 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--sn-wasabi);
+    margin-bottom: 8px;
+  }
+  .strip-card p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+  }
 
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+  /* How it works - horizontal flow */
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 14px;
+  }
+  .flow-strip {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 28px;
+    flex-wrap: nowrap;
+  }
+  .flow-node {
+    flex: 1;
+    text-align: center;
+    padding: 14px 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+  }
+  .flow-node .fn-num {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--sn-wasabi);
+    line-height: 1;
+  }
+  .flow-node .fn-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    margin-top: 4px;
+    letter-spacing: 0.5px;
+  }
+  .flow-node .fn-detail {
+    font-size: 9px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 3px;
+  }
+  .flow-chevron {
+    font-size: 14px;
+    color: rgba(255,255,255,0.12);
+    flex-shrink: 0;
+    padding: 0 4px;
+  }
 
-    .nav-logo {
-      width: 32px;
-      height: 32px;
-      background: var(--accent);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-    }
+  /* Data sources grid */
+  .data-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .data-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+  }
+  .data-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .data-item h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 2px;
+  }
+  .data-item p {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.4;
+  }
 
-    .nav-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-    }
+  /* Impact metrics */
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+  .metric {
+    text-align: center;
+    padding: 16px 10px;
+    background: rgba(184,233,134,0.06);
+    border: 1px solid rgba(184,233,134,0.12);
+    border-radius: 12px;
+  }
+  .metric .m-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--sn-wasabi);
+    line-height: 1;
+  }
+  .metric .m-label {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 6px;
+  }
 
-    .nav-title span { color: var(--accent2); }
+  /* Tech stack bar */
+  .tech-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .tech-pill {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 4px 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    color: rgba(255,255,255,0.5);
+  }
+  .tech-pill.primary {
+    background: rgba(184,233,134,0.1);
+    border-color: rgba(184,233,134,0.2);
+    color: var(--sn-wasabi);
+  }
 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+  /* Bottom CTA */
+  .bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 44px;
+    background: rgba(0,0,0,0.2);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .bottom-bar .author {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+  }
+  .bottom-bar .author strong { color: rgba(255,255,255,0.7); }
+  .bottom-bar .cta {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 8px 22px;
+    background: var(--sn-wasabi);
+    color: var(--sn-infinite);
+    border-radius: 8px;
+    letter-spacing: 0.3px;
+  }
 
-    .nav-links a {
-      font-size: 13px;
-      color: var(--muted);
-      text-decoration: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: all 0.15s;
-    }
-
-    .nav-links a:hover {
-      background: var(--border);
-      color: var(--text);
-    }
-
-    #status-pill {
-      font-size: 11px;
-      padding: 3px 10px;
-      border-radius: 20px;
-      background: var(--border);
-      color: var(--muted);
-      margin-left: 8px;
-    }
-    #status-pill.ok  { background: #0d2a1a; color: var(--success); }
-    #status-pill.err { background: #2a0d0d; color: var(--danger);  }
-
-    .hero {
-      background: linear-gradient(135deg, #161b27 0%, #0f1117 60%);
-      border-bottom: 1px solid var(--border);
-      padding: 48px 32px 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
-      top: -60px; left: 50%;
-      transform: translateX(-50%);
-      width: 400px; height: 200px;
-      background: radial-gradient(ellipse, rgba(99,102,241,0.15) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero h2 {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 8px;
-    }
-
-    .hero h2 span { color: var(--accent2); }
-
-    .hero p {
-      font-size: 14px;
-      color: var(--muted);
-      max-width: 480px;
-      margin: 0 auto 24px;
-      line-height: 1.6;
-    }
-
-    #tab-bar {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .tab {
-      font-size: 12px;
-      padding: 6px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      transition: all 0.15s;
-    }
-    .tab:hover  { border-color: #334155; color: var(--text); }
-    .tab.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #fff;
-    }
-
-    main {
-      flex: 1;
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    #stage {
-      width: 100%;
-      max-width: 1100px;
-    }
-
-    #stage-label {
-      font-size: 11px;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
-      display: none;
-    }
-
-    #frame {
-      width: 100%;
-      height: 72vh;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: #fff;
-      display: none;
-    }
-
-    #img-view {
-      max-width: 100%;
-      max-height: 72vh;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      display: none;
-    }
-
-    #code-view {
-      width: 100%;
-      max-height: 72vh;
-      overflow: auto;
-      background: #0a0d14;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      font-family: 'Fira Code', 'Courier New', monospace;
-      font-size: 13px;
-      line-height: 1.7;
-      color: #94a3b8;
-      white-space: pre;
-      display: none;
-    }
-
-    #anim-view {
-      width: 100%;
-      min-height: 300px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      background: #0a0d14;
-    }
-
-    #empty {
-      text-align: center;
-      padding: 64px 0;
-      color: var(--border);
-    }
-    #empty svg  { margin-bottom: 16px; opacity: 0.5; }
-    #empty h3   { font-size: 16px; color: var(--muted); margin-bottom: 8px; }
-    #empty p    { font-size: 13px; color: var(--border); line-height: 1.7; }
-    #empty code {
-      font-size: 12px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 2px 8px;
-      border-radius: 4px;
-      color: var(--muted);
-    }
-
-    footer {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      padding: 20px 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .footer-left  { font-size: 12px; color: var(--muted); }
-    .footer-left strong { color: var(--text); }
-    .footer-right { font-size: 11px; color: var(--border); }
-    #last-loaded  { font-size: 11px; color: var(--muted); }
-  </style>
+  /* Voice commands section */
+  .voice-section {
+    margin-bottom: 28px;
+  }
+  .voice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .voice-cmd {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    color: rgba(255,255,255,0.55);
+  }
+  .voice-cmd em {
+    color: var(--sn-wasabi);
+    font-style: normal;
+    font-weight: 500;
+  }
+</style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-brand">
-    <div class="nav-logo">P</div>
-    <span class="nav-title">My <span>Playground</span></span>
-  </div>
-  <div class="nav-links">
-    <a href="https://github.com/testmail-ihub/demohtml" target="_blank">&#128196; Repo</a>
-    <a href="#" onclick="probe(); return false;">&#8635; Refresh</a>
-    <span id="status-pill">ready</span>
-  </div>
-</nav>
-
-<!-- HERO -->
-<div class="hero">
-  <h2>Live <span>Preview</span> Playground</h2>
-  <p>Push any file to the GitHub repo — it instantly appears here as a tab.</p>
-  <div id="tab-bar"></div>
-</div>
-
-<!-- MAIN -->
-<main>
-  <div id="stage">
-    <div id="stage-label"></div>
-    <div id="empty">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
-           stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
-        <polyline points="13 2 13 9 20 9"/>
-        <line x1="9" y1="13" x2="15" y2="13"/>
-        <line x1="9" y1="17" x2="13" y2="17"/>
-      </svg>
-      <h3>Nothing pushed yet</h3>
-      <p>Push a file like <code>demo.html</code> or <code>photo.png</code><br/>
-      to your repo and it will show up here automatically.</p>
+<div class="page">
+  <div class="top-banner">
+    <div class="top-row">
+      <div class="logo-area">ServiceNow Innovation</div>
+      <div class="panel-badge">Innovation Showcase 2026</div>
     </div>
-    <iframe  id="frame"     sandbox="allow-scripts allow-same-origin"></iframe>
-    <img     id="img-view"  alt="preview" />
-    <pre     id="code-view"></pre>
-    <div     id="anim-view"></div>
+    <h1>CIO <span>Morning Briefing</span></h1>
+    <div class="tagline">Voice-first executive command surface on Amazon Echo Show 5 — powered by ServiceNow + Now Assist</div>
   </div>
-</main>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-left">
-    <strong>testmail-ihub</strong> / demohtml &nbsp;·&nbsp; GitHub Pages
+  <div class="content">
+
+    <!-- Problem / Solution / Demo -->
+    <div class="strip">
+      <div class="strip-card">
+        <div class="sc-icon">🔥</div>
+        <h3>The Problem</h3>
+        <p>CIOs start every morning digging through dashboards, emails, and Slack to piece together "what happened overnight." By the time they have context, the first meeting has already started.</p>
+      </div>
+      <div class="strip-card">
+        <div class="sc-icon">💡</div>
+        <h3>The Solution</h3>
+        <p>One voice command — <strong style="color:var(--sn-wasabi)">"Alexa, morning briefing"</strong> — delivers a 60-second spoken + visual summary with P1s, changes, approvals, health, and an AI-generated risk insight. Act by voice.</p>
+      </div>
+      <div class="strip-card">
+        <div class="sc-icon">🎯</div>
+        <h3>The Demo</h3>
+        <p>Live Echo Show 5 connected to a ServiceNow instance. Trigger the briefing, watch 6 screens auto-play, approve a change by voice, and hear Now Assist flag a change/incident conflict.</p>
+      </div>
+    </div>
+
+    <!-- How it works -->
+    <div class="section-label">How It Works</div>
+    <div class="flow-strip">
+      <div class="flow-node">
+        <div class="fn-num">1</div>
+        <div class="fn-label">Voice Trigger</div>
+        <div class="fn-detail">Alexa Skills Kit</div>
+      </div>
+      <div class="flow-chevron">›</div>
+      <div class="flow-node">
+        <div class="fn-num">2</div>
+        <div class="fn-label">Lambda</div>
+        <div class="fn-detail">Intent → API call</div>
+      </div>
+      <div class="flow-chevron">›</div>
+      <div class="flow-node">
+        <div class="fn-num">3</div>
+        <div class="fn-label">ServiceNow API</div>
+        <div class="fn-detail">Scripted REST agg.</div>
+      </div>
+      <div class="flow-chevron">›</div>
+      <div class="flow-node">
+        <div class="fn-num">4</div>
+        <div class="fn-label">Now Assist</div>
+        <div class="fn-detail">AI insight gen</div>
+      </div>
+      <div class="flow-chevron">›</div>
+      <div class="flow-node">
+        <div class="fn-num">5</div>
+        <div class="fn-label">Echo Show</div>
+        <div class="fn-detail">Voice + Display</div>
+      </div>
+    </div>
+
+    <!-- Data Sources -->
+    <div class="section-label">ServiceNow Data Sources</div>
+    <div class="data-grid">
+      <div class="data-item">
+        <div class="data-icon">⚡</div>
+        <div>
+          <h4>P1/P2 Incidents</h4>
+          <p>Real-time overnight incidents with SLA countdowns, assignment groups, and priority context</p>
+        </div>
+      </div>
+      <div class="data-item">
+        <div class="data-icon">🔄</div>
+        <div>
+          <h4>Change Requests</h4>
+          <p>Today's change window with risk scores, conflict detection against open incidents</p>
+        </div>
+      </div>
+      <div class="data-item">
+        <div class="data-icon">✅</div>
+        <div>
+          <h4>Pending Approvals</h4>
+          <p>Voice-actionable approvals/rejections with NLU fuzzy matching to ticket descriptions</p>
+        </div>
+      </div>
+      <div class="data-item">
+        <div class="data-icon">📊</div>
+        <div>
+          <h4>Platform & Integration Health</h4>
+          <p>Uptime, response times, spoke status, flow failures — composite AI-computed health score</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Voice Commands -->
+    <div class="voice-section">
+      <div class="section-label">Voice Commands</div>
+      <div class="voice-grid">
+        <div class="voice-cmd"><em>"Alexa, morning briefing"</em> — Full 60-sec briefing</div>
+        <div class="voice-cmd"><em>"Approve all"</em> — Batch approve pending items</div>
+        <div class="voice-cmd"><em>"Show incidents"</em> — Jump to incident view</div>
+        <div class="voice-cmd"><em>"Escalate the payment issue"</em> — Escalate P1</div>
+        <div class="voice-cmd"><em>"What should I watch today?"</em> — AI insight</div>
+        <div class="voice-cmd"><em>"Reschedule the Oracle patch"</em> — Move change</div>
+      </div>
+    </div>
+
+    <!-- Impact Metrics -->
+    <div class="section-label">Projected Impact</div>
+    <div class="metrics-row">
+      <div class="metric">
+        <div class="m-value">30m</div>
+        <div class="m-label">Daily time saved<br>per executive</div>
+      </div>
+      <div class="metric">
+        <div class="m-value">0</div>
+        <div class="m-label">Logins required<br>for morning context</div>
+      </div>
+      <div class="metric">
+        <div class="m-value">60s</div>
+        <div class="m-label">Full situational<br>awareness</div>
+      </div>
+      <div class="metric">
+        <div class="m-value">AI</div>
+        <div class="m-label">Cross-correlation<br>no human catches</div>
+      </div>
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="section-label">Technology Stack</div>
+    <div class="tech-bar">
+      <span class="tech-pill primary">ServiceNow Scoped App</span>
+      <span class="tech-pill primary">Now Assist / GenAI</span>
+      <span class="tech-pill primary">Scripted REST API</span>
+      <span class="tech-pill">Alexa Skills Kit</span>
+      <span class="tech-pill">APL 1.9</span>
+      <span class="tech-pill">AWS Lambda (Node.js 18)</span>
+      <span class="tech-pill">OAuth 2.0</span>
+      <span class="tech-pill">Echo Show 5</span>
+      <span class="tech-pill">SSML</span>
+    </div>
+
   </div>
-  <div id="last-loaded">No file loaded</div>
-  <div class="footer-right">Auto-refreshes every 30s</div>
-</footer>
 
-<script>
-  // ── ADD YOUR FILES HERE ──────────────────────────────────────
-  const FILES = [
-    "demo.html",
-    "login.html",
-    "animation.css",
-    "sketch.js",
-    "photo.png",
-    "photo.jpg",
-    "photo.gif",
-    "photo.svg",
-    "photo.webp",
-    "data.json",
-  ];
-  // ────────────────────────────────────────────────────────────
-
-  const IMG  = ["png","jpg","jpeg","gif","svg","webp","avif"];
-  const CODE = ["js","ts","py","json","md","txt","xml","yml","yaml"];
-  const ANIM = ["css"];
-
-  const $   = id => document.getElementById(id);
-  const ext = f  => f.split(".").pop().toLowerCase();
-
-  function hideAll() {
-    ["frame","img-view","code-view","anim-view","empty"].forEach(id => {
-      $(id).style.display = "none";
-    });
-    $("stage-label").style.display = "none";
-  }
-
-  function setStatus(txt, cls) {
-    const el = $("status-pill");
-    el.textContent = txt;
-    el.className   = cls || "";
-  }
-
-  function setLabel(txt) {
-    const el = $("stage-label");
-    el.textContent   = txt;
-    el.style.display = "block";
-  }
-
-  async function load(filename) {
-    hideAll();
-    setStatus("loading…", "");
-
-    document.querySelectorAll(".tab").forEach(t =>
-      t.classList.toggle("active", t.dataset.f === filename));
-
-    const url  = filename + "?v=" + Date.now();
-    const type = ext(filename);
-
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(res.status);
-
-      if (type === "html") {
-        $("frame").srcdoc        = await res.text();
-        $("frame").style.display = "block";
-        setLabel("HTML Page — " + filename);
-        setStatus("html ✓", "ok");
-
-      } else if (IMG.includes(type)) {
-        $("img-view").src              = url;
-        $("img-view").style.display    = "block";
-        setLabel("Image — " + filename);
-        setStatus("image ✓", "ok");
-
-      } else if (ANIM.includes(type)) {
-        const css = await res.text();
-        $("anim-view").innerHTML       =
-          `<style>${css}</style><div class="target"></div>`;
-        $("anim-view").style.display   = "flex";
-        setLabel("CSS Animation — " + filename);
-        setStatus("css ✓", "ok");
-
-      } else if (CODE.includes(type)) {
-        $("code-view").textContent     = await res.text();
-        $("code-view").style.display   = "block";
-        setLabel(type.toUpperCase() + " File — " + filename);
-        setStatus(type + " ✓", "ok");
-
-      } else {
-        $("frame").srcdoc        = await res.text();
-        $("frame").style.display = "block";
-        setLabel("Rendered — " + filename);
-        setStatus("ok ✓", "ok");
-      }
-
-      $("last-loaded").textContent =
-        "Last loaded: " + filename + "  ·  " + new Date().toLocaleTimeString();
-
-    } catch (e) {
-      $("empty").style.display = "block";
-      $("empty").querySelector("h3").textContent = "File not found";
-      $("empty").querySelector("p").textContent  =
-        '"' + filename + '" is not in the repo yet. Push it and refresh.';
-      setStatus("not found", "err");
-      $("last-loaded").textContent = "Failed: " + filename;
-    }
-  }
-
-  async function probe() {
-    const found = [];
-    await Promise.all(FILES.map(async f => {
-      try {
-        const r = await fetch(f + "?probe=1", { method: "HEAD" });
-        if (r.ok) found.push(f);
-      } catch (_) {}
-    }));
-
-    const bar = $("tab-bar");
-    bar.innerHTML = "";
-    found.forEach(f => {
-      const b       = document.createElement("button");
-      b.className   = "tab";
-      b.textContent = f;
-      b.dataset.f   = f;
-      b.onclick     = () => load(f);
-      bar.appendChild(b);
-    });
-
-    if (found.length) {
-      const active = document.querySelector(".tab.active");
-      if (!active) load(found[0]);
-    } else {
-      $("empty").style.display = "block";
-    }
-  }
-
-  probe();
-  setInterval(probe, 30000);
-</script>
+  <div class="bottom-bar">
+    <div class="author"><strong>Manish</strong> · Integration Hub Team · ServiceNow</div>
+    <div class="cta">🎤 Live Demo Available</div>
+  </div>
+</div>
 
 </body>
 </html>
