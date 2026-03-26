@@ -1,10 +1,451 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Demo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Portfolio</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:        #0f1117;
+      --surface:   #161b27;
+      --border:    #1e2a3a;
+      --accent:    #6366f1;
+      --accent2:   #818cf8;
+      --text:      #e2e8f0;
+      --muted:     #64748b;
+      --success:   #4ade80;
+      --danger:    #f87171;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .nav-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .nav-title span { color: var(--accent2); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+
+    .nav-links a:hover {
+      background: var(--border);
+      color: var(--text);
+    }
+
+    #status-pill {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--border);
+      color: var(--muted);
+      margin-left: 8px;
+    }
+    #status-pill.ok  { background: #0d2a1a; color: var(--success); }
+    #status-pill.err { background: #2a0d0d; color: var(--danger);  }
+
+    .hero {
+      background: linear-gradient(135deg, #161b27 0%, #0f1117 60%);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 32px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -60px; left: 50%;
+      transform: translateX(-50%);
+      width: 400px; height: 200px;
+      background: radial-gradient(ellipse, rgba(99,102,241,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero h2 {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .hero h2 span { color: var(--accent2); }
+
+    .hero p {
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 24px;
+      line-height: 1.6;
+    }
+
+    #tab-bar {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      font-size: 12px;
+      padding: 6px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+    .tab:hover  { border-color: #334155; color: var(--text); }
+    .tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    main {
+      flex: 1;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #stage {
+      width: 100%;
+      max-width: 1100px;
+    }
+
+    #stage-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    #frame {
+      width: 100%;
+      height: 72vh;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      display: none;
+    }
+
+    #img-view {
+      max-width: 100%;
+      max-height: 72vh;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: none;
+    }
+
+    #code-view {
+      width: 100%;
+      max-height: 72vh;
+      overflow: auto;
+      background: #0a0d14;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      color: #94a3b8;
+      white-space: pre;
+      display: none;
+    }
+
+    #anim-view {
+      width: 100%;
+      min-height: 300px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: #0a0d14;
+    }
+
+    #empty {
+      text-align: center;
+      padding: 64px 0;
+      color: var(--border);
+    }
+    #empty svg  { margin-bottom: 16px; opacity: 0.5; }
+    #empty h3   { font-size: 16px; color: var(--muted); margin-bottom: 8px; }
+    #empty p    { font-size: 13px; color: var(--border); line-height: 1.7; }
+    #empty code {
+      font-size: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 4px;
+      color: var(--muted);
+    }
+
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .footer-left  { font-size: 12px; color: var(--muted); }
+    .footer-left strong { color: var(--text); }
+    .footer-right { font-size: 11px; color: var(--border); }
+    #last-loaded  { font-size: 11px; color: var(--muted); }
+  </style>
 </head>
 <body>
-  <h1>Hello! GitHub Pages is working 🎉</h1>
-  <p>Now push anything here and it will go live.</p>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">P</div>
+    <span class="nav-title">My <span>Playground</span></span>
+  </div>
+  <div class="nav-links">
+    <a href="https://github.com/testmail-ihub/demohtml" target="_blank">&#128196; Repo</a>
+    <a href="#" onclick="probe(); return false;">&#8635; Refresh</a>
+    <span id="status-pill">ready</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h2>Live <span>Preview</span> Playground</h2>
+  <p>Push any file to the GitHub repo — it instantly appears here as a tab.</p>
+  <div id="tab-bar"></div>
+</div>
+
+<!-- MAIN -->
+<main>
+  <div id="stage">
+    <div id="stage-label"></div>
+    <div id="empty">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+        <polyline points="13 2 13 9 20 9"/>
+        <line x1="9" y1="13" x2="15" y2="13"/>
+        <line x1="9" y1="17" x2="13" y2="17"/>
+      </svg>
+      <h3>Nothing pushed yet</h3>
+      <p>Push a file like <code>demo.html</code> or <code>photo.png</code><br/>
+      to your repo and it will show up here automatically.</p>
+    </div>
+    <iframe  id="frame"     sandbox="allow-scripts allow-same-origin"></iframe>
+    <img     id="img-view"  alt="preview" />
+    <pre     id="code-view"></pre>
+    <div     id="anim-view"></div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <strong>testmail-ihub</strong> / demohtml &nbsp;·&nbsp; GitHub Pages
+  </div>
+  <div id="last-loaded">No file loaded</div>
+  <div class="footer-right">Auto-refreshes every 30s</div>
+</footer>
+
+<script>
+  // ── ADD YOUR FILES HERE ──────────────────────────────────────
+  const FILES = [
+    "demo.html",
+    "login.html",
+    "animation.css",
+    "sketch.js",
+    "photo.png",
+    "photo.jpg",
+    "photo.gif",
+    "photo.svg",
+    "photo.webp",
+    "data.json",
+  ];
+  // ────────────────────────────────────────────────────────────
+
+  const IMG  = ["png","jpg","jpeg","gif","svg","webp","avif"];
+  const CODE = ["js","ts","py","json","md","txt","xml","yml","yaml"];
+  const ANIM = ["css"];
+
+  const $   = id => document.getElementById(id);
+  const ext = f  => f.split(".").pop().toLowerCase();
+
+  function hideAll() {
+    ["frame","img-view","code-view","anim-view","empty"].forEach(id => {
+      $(id).style.display = "none";
+    });
+    $("stage-label").style.display = "none";
+  }
+
+  function setStatus(txt, cls) {
+    const el = $("status-pill");
+    el.textContent = txt;
+    el.className   = cls || "";
+  }
+
+  function setLabel(txt) {
+    const el = $("stage-label");
+    el.textContent   = txt;
+    el.style.display = "block";
+  }
+
+  async function load(filename) {
+    hideAll();
+    setStatus("loading…", "");
+
+    document.querySelectorAll(".tab").forEach(t =>
+      t.classList.toggle("active", t.dataset.f === filename));
+
+    const url  = filename + "?v=" + Date.now();
+    const type = ext(filename);
+
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(res.status);
+
+      if (type === "html") {
+        $("frame").srcdoc        = await res.text();
+        $("frame").style.display = "block";
+        setLabel("HTML Page — " + filename);
+        setStatus("html ✓", "ok");
+
+      } else if (IMG.includes(type)) {
+        $("img-view").src              = url;
+        $("img-view").style.display    = "block";
+        setLabel("Image — " + filename);
+        setStatus("image ✓", "ok");
+
+      } else if (ANIM.includes(type)) {
+        const css = await res.text();
+        $("anim-view").innerHTML       =
+          `<style>${css}</style><div class="target"></div>`;
+        $("anim-view").style.display   = "flex";
+        setLabel("CSS Animation — " + filename);
+        setStatus("css ✓", "ok");
+
+      } else if (CODE.includes(type)) {
+        $("code-view").textContent     = await res.text();
+        $("code-view").style.display   = "block";
+        setLabel(type.toUpperCase() + " File — " + filename);
+        setStatus(type + " ✓", "ok");
+
+      } else {
+        $("frame").srcdoc        = await res.text();
+        $("frame").style.display = "block";
+        setLabel("Rendered — " + filename);
+        setStatus("ok ✓", "ok");
+      }
+
+      $("last-loaded").textContent =
+        "Last loaded: " + filename + "  ·  " + new Date().toLocaleTimeString();
+
+    } catch (e) {
+      $("empty").style.display = "block";
+      $("empty").querySelector("h3").textContent = "File not found";
+      $("empty").querySelector("p").textContent  =
+        '"' + filename + '" is not in the repo yet. Push it and refresh.';
+      setStatus("not found", "err");
+      $("last-loaded").textContent = "Failed: " + filename;
+    }
+  }
+
+  async function probe() {
+    const found = [];
+    await Promise.all(FILES.map(async f => {
+      try {
+        const r = await fetch(f + "?probe=1", { method: "HEAD" });
+        if (r.ok) found.push(f);
+      } catch (_) {}
+    }));
+
+    const bar = $("tab-bar");
+    bar.innerHTML = "";
+    found.forEach(f => {
+      const b       = document.createElement("button");
+      b.className   = "tab";
+      b.textContent = f;
+      b.dataset.f   = f;
+      b.onclick     = () => load(f);
+      bar.appendChild(b);
+    });
+
+    if (found.length) {
+      const active = document.querySelector(".tab.active");
+      if (!active) load(found[0]);
+    } else {
+      $("empty").style.display = "block";
+    }
+  }
+
+  probe();
+  setInterval(probe, 30000);
+</script>
+
 </body>
 </html>
